@@ -763,3 +763,74 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+/* Responder Portal Styles */
+.responder-alert-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    border-left: 4px solid var(--sos-red);
+}
+
+.alert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.alert-header h4 {
+    color: var(--text-main);
+    font-size: 1.1rem;
+}
+
+.badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.badge.critical {
+    background: #fee2e2;
+    color: var(--sos-red);
+}
+
+.alert-details {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.alert-details p {
+    margin-bottom: 0.2rem;
+}
+
+.alert-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-reject {
+    flex: 1;
+    padding: 0.8rem;
+    background: #f1f5f9;
+    color: var(--text-main);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-accept {
+    flex: 2;
+    padding: 0.8rem;
+    background: var(--hospital-green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
