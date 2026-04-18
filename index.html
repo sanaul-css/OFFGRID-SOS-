@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="app-container">
-        <!-- Login Screen -->
+        <!-- Login Selection / User Login Screen -->
         <section id="login-screen" class="screen active">
             <div class="auth-wrapper">
                 <div class="logo-container">
@@ -19,7 +23,13 @@
                     <h1>SafeNet</h1>
                     <p>Emergency Response</p>
                 </div>
-                <form class="auth-form" id="login-form">
+                
+                <div id="login-options" style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                    <button id="btn-show-user-login" class="btn primary-btn">Login as User</button>
+                    <button id="btn-show-helper-login" class="btn primary-btn" style="background: var(--hospital-green);">Login as Helper</button>
+                </div>
+
+                <form class="auth-form" id="login-form" style="display: none;">
                     <div class="input-group">
                         <i class="fa-regular fa-envelope"></i>
                         <input type="email" placeholder="Email" required>
@@ -29,10 +39,12 @@
                         <input type="password" placeholder="Password" required>
                     </div>
                     <button type="submit" class="btn primary-btn">Login</button>
+                    
+                    <div class="auth-footer" style="margin-top: 1rem; text-align: center;">
+                        <p>Don't have an account? <a href="#" id="link-signup">Sign up</a></p>
+                        <p style="margin-top: 0.5rem;"><a href="#" id="link-back-options"><i class="fa-solid fa-arrow-left"></i> Back</a></p>
+                    </div>
                 </form>
-                <div class="auth-footer">
-                    <p>Don't have an account? <a href="#" id="link-signup">Sign up</a></p>
-                </div>
             </div>
         </section>
 
@@ -70,7 +82,7 @@
             <header class="home-header">
                 <div class="header-info">
                     <h2>Hello, User</h2>
-                    <p><i class="fa-solid fa-location-dot"></i> New York, NY</p>
+                    <p><i class="fa-solid fa-location-dot"></i> INDIA , NEW DELHI</p>
                 </div>
                 <div class="profile-pic">
                     <i class="fa-solid fa-user"></i>
@@ -82,6 +94,15 @@
                 <div id="ai-status-indicator" class="ai-indicator" style="display: none;">
                     <div class="pulsing-dot"></div>
                     <span>AI Detection: ON</span>
+                </div>
+
+                <!-- Live Map -->
+                <div class="section-card map-section"
+                    style="padding: 0; overflow: hidden; height: 180px; margin-bottom: 1rem; position: relative;">
+                    <div id="map" style="width: 100%; height: 100%; z-index: 1;"></div>
+                    <div id="map-status"
+                        style="position: absolute; top: 10px; left: 10px; z-index: 2; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <i class="fa-solid fa-location-crosshairs fa-spin"></i> Locating...</div>
                 </div>
 
                 <!-- Large SOS Button -->
@@ -116,40 +137,26 @@
                     <div class="section-header">
                         <h3>Nearest Services</h3>
                     </div>
-                    <div class="services-list">
-                        <div class="service-item">
-                            <div class="service-icon police"><i class="fa-solid fa-building-shield"></i></div>
-                            <div class="service-info">
-                                <h4>Police Station</h4>
-                                <p>0.5 miles away</p>
-                            </div>
-                        </div>
-                        <div class="service-item">
-                            <div class="service-icon hospital"><i class="fa-solid fa-truck-medical"></i></div>
-                            <div class="service-info">
-                                <h4>City Hospital</h4>
-                                <p>1.2 miles away</p>
-                            </div>
-                        </div>
-                        <div class="service-item">
-                            <div class="service-icon fire"><i class="fa-solid fa-fire-extinguisher"></i></div>
-                            <div class="service-info">
-                                <h4>Fire Department</h4>
-                                <p>2.0 miles away</p>
-                            </div>
-                        </div>
+                    <div class="services-list" id="nearest-services-list">
+                        <!-- Simulated Nearest Services will be rendered here -->
+                        <div style="text-align: center; color: var(--text-muted); padding: 1rem;"><i
+                                class="fa-solid fa-spinner fa-spin"></i> Finding nearby services...</div>
                     </div>
                 </div>
 
                 <!-- Simulation Tools (Demo) -->
-                <div class="section-card simulation-section" style="margin-top: 0.5rem; background: rgba(255, 200, 200, 0.7); border-color: rgba(255, 0, 0, 0.2);">
+                <div class="section-card simulation-section"
+                    style="margin-top: 0.5rem; background: rgba(255, 200, 200, 0.7); border-color: rgba(255, 0, 0, 0.2);">
                     <div class="section-header" style="margin-bottom: 0.5rem;">
-                        <h3 style="color: var(--sos-red);"><i class="fa-solid fa-satellite-dish"></i> Auto-Detection Demo</h3>
+                        <h3 style="color: var(--sos-red);"><i class="fa-solid fa-satellite-dish"></i> Auto-Detection
+                            Demo</h3>
                     </div>
-                    <button id="enable-ai-btn" class="btn primary-btn" style="width: 100%; background: var(--hospital-green); margin-bottom: 0.5rem; box-shadow: none;">
+                    <button id="enable-ai-btn" class="btn primary-btn"
+                        style="width: 100%; background: var(--hospital-green); margin-bottom: 0.5rem; box-shadow: none;">
                         <i class="fa-solid fa-shield-halved"></i> Enable AI Detection
                     </button>
-                    <button id="simulate-accident-btn" class="btn primary-btn" style="width: 100%; background: var(--sos-red); box-shadow: none;">
+                    <button id="simulate-accident-btn" class="btn primary-btn"
+                        style="width: 100%; background: var(--sos-red); box-shadow: none;">
                         <i class="fa-solid fa-car-burst"></i> Simulate Accident
                     </button>
                 </div>
@@ -180,7 +187,7 @@
                         <button type="submit" class="btn primary-btn" style="width: 100%;">Save Contact</button>
                     </form>
                 </div>
-                
+
                 <div class="section-card contacts-section" style="margin-top: 1.5rem;">
                     <div class="section-header">
                         <h3>Saved Contacts</h3>
@@ -212,22 +219,25 @@
                             <span class="slider round"></span>
                         </label>
                     </div>
-                    
+
                     <div class="setting-item" style="margin-top: 1.5rem;">
                         <div class="setting-info">
                             <h4><i class="fa-solid fa-stopwatch"></i> Countdown Time</h4>
                             <p>Seconds before SOS sends</p>
                         </div>
-                        <input type="number" id="setting-countdown-time" class="setting-input" value="30" min="5" max="120">
+                        <input type="number" id="setting-countdown-time" class="setting-input" value="30" min="5"
+                            max="120">
                     </div>
                 </div>
-                
+
                 <div class="section-card info-section" style="margin-top: 1.5rem; text-align: center;">
                     <div class="app-info">
-                        <i class="fa-solid fa-shield-heart" style="font-size: 3rem; color: var(--accent-blue); margin-bottom: 0.5rem;"></i>
+                        <i class="fa-solid fa-shield-heart"
+                            style="font-size: 3rem; color: var(--accent-blue); margin-bottom: 0.5rem;"></i>
                         <h3 style="font-size: 1.5rem; color: var(--text-main);">SafeNet</h3>
                         <p style="color: var(--text-muted);">Version 1.0.0</p>
-                        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">Developed for personal safety.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">Developed for
+                            personal safety.</p>
                     </div>
                 </div>
             </main>
@@ -248,6 +258,78 @@
                 <span>Settings</span>
             </a>
         </nav>
+
+        <!-- Helper Login Screen -->
+        <section id="helper-login-screen" class="screen">
+            <div class="auth-wrapper">
+                <div class="logo-container">
+                    <i class="fa-solid fa-truck-medical" style="color: var(--hospital-green);"></i>
+                    <h1>Helper Login</h1>
+                    <p>Secure access for emergency services</p>
+                </div>
+                <form class="auth-form" id="helper-login-form">
+                    <div class="input-group">
+                        <i class="fa-solid fa-user-nurse"></i>
+                        <input type="text" id="helper-name" placeholder="Full Name" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-building-user"></i>
+                        <select id="helper-role" required
+                            style="width: 100%; padding: 1.2rem 1.2rem 1.2rem 3rem; border: 1px solid var(--surface-border); border-radius: 16px; background: var(--surface-color); font-size: 1rem; color: var(--text-main); outline: none;">
+                            <option value="">Select Role</option>
+                            <option value="Ambulance">Ambulance</option>
+                            <option value="Police">Police</option>
+                            <option value="Firefighter">Firefighter</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn primary-btn"
+                        style="background: var(--hospital-green);">Login</button>
+                </form>
+                <div class="auth-footer">
+                    <p><a href="#" id="link-back-helper-options"><i class="fa-solid fa-arrow-left"></i> Back to Options</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Helper Dashboard -->
+        <section id="helper-portal" class="screen">
+            <header class="home-header" style="background: #1e293b; color: white;">
+                <div class="header-info">
+                    <h2 style="color: white;">Helper Dashboard</h2>
+                    <p style="color: #cbd5e1;" id="helper-role-display">Unit 42 - Standby</p>
+                </div>
+                <div class="profile-pic" style="color: var(--text-main);">
+                    <i class="fa-solid fa-truck-fast"></i>
+                </div>
+            </header>
+            <main class="home-content" style="background: #f8fafc; padding-bottom: 2rem;">
+                <div class="section-header" style="padding: 1rem 0;">
+                    <h3>Incoming SOS Alerts</h3>
+                </div>
+
+                <div id="helper-alerts-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Alerts will populate here -->
+                    <p style="text-align: center; color: var(--text-muted); padding: 2rem;">No active alerts at this
+                        time.</p>
+                </div>
+            </main>
+
+            <nav class="bottom-nav" style="background: #1e293b; border-top: none;">
+                <a href="#" class="nav-item active" style="color: var(--hospital-green);">
+                    <i class="fa-solid fa-tower-broadcast"></i>
+                    <span>Alerts</span>
+                </a>
+                <a href="#" class="nav-item" style="color: #cbd5e1;">
+                    <i class="fa-solid fa-route"></i>
+                    <span>Map</span>
+                </a>
+                <a href="#" class="nav-item" id="btn-helper-logout" style="color: #cbd5e1;">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </section>
+
     </div>
 
     <!-- SOS Modal Overlay -->
@@ -263,22 +345,28 @@
                 <p>seconds</p>
                 <button id="cancel-sos-btn" class="btn cancel-btn">Cancel</button>
             </div>
-            
+
             <div id="sos-success-view" class="modal-view">
                 <div class="success-icon">
                     <i class="fa-solid fa-circle-check"></i>
                 </div>
                 <h2>SOS Alert Sent Successfully</h2>
-                <ul class="notified-list">
-                    <li><i class="fa-solid fa-truck-medical"></i> Ambulance Notified</li>
-                    <li><i class="fa-solid fa-building-shield"></i> Police Notified</li>
-                    <li><i class="fa-solid fa-fire-extinguisher"></i> Firefighters Notified</li>
+                <ul class="notified-list" id="sos-notified-list">
+                    <!-- Populated dynamically -->
                 </ul>
                 <button id="close-success-btn" class="btn primary-btn" style="width: 100%;">Dismiss</button>
             </div>
         </div>
     </div>
 
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Firebase SDK (Compat Version for simplicity in Vanilla JS) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
     <script src="app.js"></script>
 </body>
+
 </html>
