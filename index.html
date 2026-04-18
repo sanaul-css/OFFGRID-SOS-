@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Response UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Login Screen -->
+        <section id="login-screen" class="screen active">
+            <div class="auth-wrapper">
+                <div class="logo-container">
+                    <i class="fa-solid fa-shield-heart"></i>
+                    <h1>SafeNet</h1>
+                    <p>Emergency Response</p>
+                </div>
+                <form class="auth-form" id="login-form">
+                    <div class="input-group">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Login</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="#" id="link-signup">Sign up</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Signup Screen -->
+        <section id="signup-screen" class="screen">
+            <div class="auth-wrapper">
+                <div class="logo-container">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <h1>Create Account</h1>
+                    <p>Join SafeNet today</p>
+                </div>
+                <form class="auth-form" id="signup-form">
+                    <div class="input-group">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" placeholder="Full Name" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Sign Up</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="#" id="link-login">Login</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Home Dashboard -->
+        <section id="home-screen" class="screen main-screen">
+            <header class="home-header">
+                <div class="header-info">
+                    <h2>Hello, User</h2>
+                    <p><i class="fa-solid fa-location-dot"></i> New York, NY</p>
+                </div>
+                <div class="profile-pic">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </header>
+
+            <main class="home-content">
+                <!-- AI Indicator -->
+                <div id="ai-status-indicator" class="ai-indicator" style="display: none;">
+                    <div class="pulsing-dot"></div>
+                    <span>AI Detection: ON</span>
+                </div>
+
+                <!-- Large SOS Button -->
+                <div class="sos-container">
+                    <div class="sos-ripple"></div>
+                    <button id="sos-btn" class="sos-btn">
+                        <span>SOS</span>
+                    </button>
+                    <p class="sos-hint">Press for 3 seconds</p>
+                </div>
+
+                <!-- Emergency Contacts -->
+                <div class="section-card contacts-section">
+                    <div class="section-header">
+                        <h3>Emergency Contacts</h3>
+                        <button class="icon-btn add-contact-btn"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <div class="contact-list">
+                        <div class="contact-item">
+                            <div class="contact-avatar">M</div>
+                            <div class="contact-info">
+                                <h4>Mom</h4>
+                                <p>Family</p>
+                            </div>
+                            <button class="call-btn"><i class="fa-solid fa-phone"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nearest Services -->
+                <div class="section-card services-section">
+                    <div class="section-header">
+                        <h3>Nearest Services</h3>
+                    </div>
+                    <div class="services-list">
+                        <div class="service-item">
+                            <div class="service-icon police"><i class="fa-solid fa-building-shield"></i></div>
+                            <div class="service-info">
+                                <h4>Police Station</h4>
+                                <p>0.5 miles away</p>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-icon hospital"><i class="fa-solid fa-truck-medical"></i></div>
+                            <div class="service-info">
+                                <h4>City Hospital</h4>
+                                <p>1.2 miles away</p>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-icon fire"><i class="fa-solid fa-fire-extinguisher"></i></div>
+                            <div class="service-info">
+                                <h4>Fire Department</h4>
+                                <p>2.0 miles away</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Tools (Demo) -->
+                <div class="section-card simulation-section" style="margin-top: 0.5rem; background: rgba(255, 200, 200, 0.7); border-color: rgba(255, 0, 0, 0.2);">
+                    <div class="section-header" style="margin-bottom: 0.5rem;">
+                        <h3 style="color: var(--sos-red);"><i class="fa-solid fa-satellite-dish"></i> Auto-Detection Demo</h3>
+                    </div>
+                    <button id="enable-ai-btn" class="btn primary-btn" style="width: 100%; background: var(--hospital-green); margin-bottom: 0.5rem; box-shadow: none;">
+                        <i class="fa-solid fa-shield-halved"></i> Enable AI Detection
+                    </button>
+                    <button id="simulate-accident-btn" class="btn primary-btn" style="width: 100%; background: var(--sos-red); box-shadow: none;">
+                        <i class="fa-solid fa-car-burst"></i> Simulate Accident
+                    </button>
+                </div>
+            </main>
+
+            </main>
+        </section>
+
+        <!-- Contacts Screen -->
+        <section id="contacts-screen" class="screen main-screen">
+            <header class="home-header">
+                <div class="header-info">
+                    <h2>Contacts</h2>
+                    <p>Manage your emergency contacts</p>
+                </div>
+            </header>
+            <main class="home-content">
+                <div class="section-card">
+                    <form id="add-contact-form" class="contact-form">
+                        <div class="input-group">
+                            <i class="fa-regular fa-user"></i>
+                            <input type="text" id="contact-name" placeholder="Contact Name" required>
+                        </div>
+                        <div class="input-group" style="margin-top: 1rem;">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="tel" id="contact-phone" placeholder="Phone Number" required>
+                        </div>
+                        <button type="submit" class="btn primary-btn" style="width: 100%;">Save Contact</button>
+                    </form>
+                </div>
+                
+                <div class="section-card contacts-section" style="margin-top: 1.5rem;">
+                    <div class="section-header">
+                        <h3>Saved Contacts</h3>
+                    </div>
+                    <div class="contact-list" id="saved-contacts-list">
+                        <!-- Contacts will be rendered here -->
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- Settings Screen -->
+        <section id="settings-screen" class="screen main-screen">
+            <header class="home-header">
+                <div class="header-info">
+                    <h2>Settings</h2>
+                    <p>App preferences</p>
+                </div>
+            </header>
+            <main class="home-content">
+                <div class="section-card settings-section">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4><i class="fa-solid fa-shield-halved"></i> AI Detection</h4>
+                            <p>Auto-detect accidents</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="setting-ai-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item" style="margin-top: 1.5rem;">
+                        <div class="setting-info">
+                            <h4><i class="fa-solid fa-stopwatch"></i> Countdown Time</h4>
+                            <p>Seconds before SOS sends</p>
+                        </div>
+                        <input type="number" id="setting-countdown-time" class="setting-input" value="30" min="5" max="120">
+                    </div>
+                </div>
+                
+                <div class="section-card info-section" style="margin-top: 1.5rem; text-align: center;">
+                    <div class="app-info">
+                        <i class="fa-solid fa-shield-heart" style="font-size: 3rem; color: var(--accent-blue); margin-bottom: 0.5rem;"></i>
+                        <h3 style="font-size: 1.5rem; color: var(--text-main);">SafeNet</h3>
+                        <p style="color: var(--text-muted);">Version 1.0.0</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">Developed for personal safety.</p>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav" id="main-bottom-nav" style="display: none;">
+            <a href="#" class="nav-item active" data-target="home-screen">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item" data-target="contacts-screen">
+                <i class="fa-solid fa-address-book"></i>
+                <span>Contacts</span>
+            </a>
+            <a href="#" class="nav-item" data-target="settings-screen">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- SOS Modal Overlay -->
+    <div id="sos-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div id="sos-timer-view" class="modal-view active">
+                <div class="warning-icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h2 id="modal-title">Emergency Detected!</h2>
+                <p id="modal-desc">Sending alert in</p>
+                <div class="timer-display" id="sos-timer">30</div>
+                <p>seconds</p>
+                <button id="cancel-sos-btn" class="btn cancel-btn">Cancel</button>
+            </div>
+            
+            <div id="sos-success-view" class="modal-view">
+                <div class="success-icon">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <h2>SOS Alert Sent Successfully</h2>
+                <ul class="notified-list">
+                    <li><i class="fa-solid fa-truck-medical"></i> Ambulance Notified</li>
+                    <li><i class="fa-solid fa-building-shield"></i> Police Notified</li>
+                    <li><i class="fa-solid fa-fire-extinguisher"></i> Firefighters Notified</li>
+                </ul>
+                <button id="close-success-btn" class="btn primary-btn" style="width: 100%;">Dismiss</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
